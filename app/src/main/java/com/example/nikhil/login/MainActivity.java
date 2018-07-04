@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
@@ -39,9 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         password = (EditText)findViewById(R.id.password);
         email = (EditText)findViewById(R.id.email);
 
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -54,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 authenticate();
 
         }
-
     }
-
 
     public void authenticate(){
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -68,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (networkInfo != null && networkInfo.isConnected()) {
 
             // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
+            //LoaderManager loaderManager = getLoaderManager();
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(LOADER_ID, null, this);
-
+            //getLoaderManager().restartLoader(LOADER_ID, null, this);
+            getLoaderManager().restartLoader(LOADER_ID, null, dataApi_1);
         }
     }
 
@@ -106,5 +103,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         result = "";
     }
 
+
+    private LoaderManager.LoaderCallbacks<String> dataApi_1
+            = new LoaderManager.LoaderCallbacks<String>(){
+
+        @Override
+        public Loader<String> onCreateLoader(int i, Bundle bundle) {
+            String[] input = new String[2];
+            input[0] = new String();
+            input[0] = email.getText().toString();
+            input[1] = new String();
+            input[1] = password.getText().toString();
+
+            return new CustomLoader(MainActivity.this,authUrl,input);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<String> loader, String data) {
+
+            if(data == null){
+                Toast.makeText(MainActivity.this,"log in failed",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(MainActivity.this,"Successfully logged in",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<String> loader) {
+            result = "";
+        }
+    };
 
 }

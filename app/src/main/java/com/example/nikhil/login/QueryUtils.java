@@ -36,12 +36,6 @@ public class QueryUtils {
 
     public static String fetchData(String requestUrl,String[] input){
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         URL url = createUrl(requestUrl);
 
         // Perform HTTP request to the URL and receive a JSON response back
@@ -104,7 +98,7 @@ public class QueryUtils {
 
         HashMap<String, String> postDataParams = new HashMap<>();
         postDataParams.put("email",input[0]);
-        postDataParams.put("password",input[1]);
+            postDataParams.put("password",input[1]);
 
 
         String jsonResponse = "";
